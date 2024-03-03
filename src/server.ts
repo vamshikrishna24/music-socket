@@ -18,8 +18,13 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("song", (file) => {
+  // console.log("a user connected ", socket.id);
+  socket.on("selectingSong", (file) => {
     socket.broadcast.emit("selectedSong", file);
+  });
+
+  socket.on("playPause", (data) => {
+    socket.broadcast.emit("playOrPause", data);
   });
 
   socket.on("disconnect", () => {
