@@ -23,8 +23,12 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("selectedSong", file);
   });
 
-  socket.on("playPause", (data) => {
-    socket.broadcast.emit("playOrPause", data);
+  socket.on("setPlayPause", (data) => {
+    socket.broadcast.emit("playPause", data);
+  });
+
+  socket.on("setProgress", (progress) => {
+    socket.broadcast.emit("progress", progress);
   });
 
   socket.on("disconnect", () => {
