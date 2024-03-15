@@ -19,16 +19,21 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   // console.log("a user connected ", socket.id);
-  socket.on("selectingSong", (file) => {
-    socket.broadcast.emit("selectedSong", file);
+
+  socket.on("join-room", (room) => {
+    // console.log(room);
+    socket.join(room);
+  });
+  socket.on("selectingSong", (file, roomId) => {
+    socket.to(roomId).emit("selectedSong", file);
   });
 
-  socket.on("setPlayPause", (data) => {
-    socket.broadcast.emit("playPause", data);
+  socket.on("setPlayPause", (data, roomId) => {
+    socket.to(roomId).emit("playPause", data);
   });
 
-  socket.on("setProgress", (progress) => {
-    socket.broadcast.emit("progress", progress);
+  socket.on("setProgress", (progress, roomId) => {
+    socket.to(roomId).emit("progress", progress);
   });
 
   socket.on("disconnect", () => {
