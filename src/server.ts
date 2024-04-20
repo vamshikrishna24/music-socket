@@ -3,6 +3,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
+import { v4 as uuid } from "uuid";
 
 config();
 
@@ -21,7 +22,7 @@ io.on("connection", (socket) => {
   // console.log("a user connected ", socket.id);
 
   socket.on("join-room", (room) => {
-    // console.log(room);
+    console.log(room);
     socket.join(room);
   });
   socket.on("selectingSong", (file, roomId) => {
@@ -34,6 +35,11 @@ io.on("connection", (socket) => {
 
   socket.on("setProgress", (progress, roomId) => {
     socket.to(roomId).emit("progress", progress);
+  });
+
+  socket.on("sendMessage", (data, roomId) => {
+    data = { ...data, Id: uuid() };
+    socket.to(roomId).emit("receiveMessage", data);
   });
 
   socket.on("disconnect", () => {
