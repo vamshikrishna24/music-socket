@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
 import { v4 as uuid } from "uuid";
+import ytdl from "ytdl-core";
 
 config();
 
@@ -49,6 +50,20 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     // console.log("a user disconnected", socket.id);
   });
+});
+
+app.get("/audio", async (req, res) => {
+  try {
+    const videoUrl: any = req.query.url;
+    const audioStream = ytdl(videoUrl, { filter: "audioonly" });
+    res.set({
+      "Content-Type": "audio/mpeg",
+    });
+    audioStream.pipe(res);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error");
+  }
 });
 
 const PORT = process.env.PORT || 8000;
