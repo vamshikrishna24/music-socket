@@ -52,20 +52,6 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/audio", async (req, res) => {
-  try {
-    const videoUrl: any = req.query.url;
-    const audioStream = ytdl(videoUrl, { filter: "audioonly" });
-    res.set({
-      "Content-Type": "audio/mpeg",
-    });
-    audioStream.pipe(res);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error");
-  }
-});
-
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
