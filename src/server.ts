@@ -4,8 +4,6 @@ import { config } from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
 import { v4 as uuid } from "uuid";
-import ytdl from "ytdl-core";
-
 config();
 
 const app = express();
@@ -18,21 +16,6 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
-});
-
-app.get("/audio", async (req, res) => {
-  try {
-    //re testing
-    const videoUrl: any = req.query.url;
-    const audioStream = ytdl(videoUrl, { filter: "audioonly" });
-    res.set({
-      "Content-Type": "audio/mpeg",
-    });
-    audioStream.pipe(res);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error");
-  }
 });
 
 io.on("connection", (socket) => {
